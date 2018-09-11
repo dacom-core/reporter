@@ -12,19 +12,12 @@ struct impl {
     void setaddr_action(const setaddr &op){
         require_auth(_self);
         
-        account_index accounts(_self, _self);
-        auto acc = accounts.find(op.username);
-        if (acc == accounts.end()) {
-            accounts.emplace(_self, [&](auto &a){
-                a.username = op.username;
-                a.addr = op.addr;
-            });
-        } else {
-            accounts.modify(acc, _self,[&](auto &a){
-                a.addr = op.addr;
-            });
-        }
-           
+        addrs_index addrs(_self, op.username);
+        
+        accounts.emplace(_self, [&](auto &a){
+            a.username = op.username;
+            a.btc = op.btc;
+        });
     }
 
 //В момент поступлений, добавляем инкам 
@@ -32,11 +25,9 @@ struct impl {
         require_auth(_self);
         
         income_index incomes(_self, _self);
-        account_index accounts (_self, _self);
         rates_index rates(_self, _self);
         auto rate = rates.find(0);
-        auto acc = accounts.find(op.username);
-
+        
         incomes.emplace(_self, [&](auto &a){
             a.id = incomes.available_primary_key();
             a.username = op.username;

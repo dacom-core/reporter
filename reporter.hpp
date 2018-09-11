@@ -48,15 +48,15 @@ namespace eosio {
     typedef eosio::multi_index<N(outcome), outcome> outcome_index;
 
 
-    // @abi table account
-    struct account{
+    // @abi table addrs
+    struct addrs{
         account_name username;
-        std::string addr;
+        std::string btc;
         uint64_t primary_key()const { return username; }
         
-        EOSLIB_SERIALIZE( account, (username)(addr))
+        EOSLIB_SERIALIZE( addrs, (username)(btc))
     };
-    typedef eosio::multi_index <N(account), account> account_index;
+    typedef eosio::multi_index <N(addrs), addrs> addrs_index;
     
     // @abi table rates
     struct rates{
