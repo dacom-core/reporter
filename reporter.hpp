@@ -38,7 +38,6 @@ namespace eosio {
         eosio::asset amount;
         uint64_t sellrate;
         uint64_t quoteamount;
-        std::string quoteasset;
         uint64_t status;
 
         uint64_t primary_key()const { return id; }
