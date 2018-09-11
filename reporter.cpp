@@ -90,9 +90,10 @@ struct impl {
         outcome_index outcomes (_self, _self);
         rates_index rates(_self, _self);
         auto rate = rates.find(0);
+
         uint64_t sellrate = rate->sellrate;
 
-        uint64_t quoteamount = amount.amount * sellrate;
+        uint64_t quoteamount = amount.amount * sellrate / 10000 ;
 
         outcomes.emplace(_self, [&](auto &a){
             a.id = outcomes.available_primary_key();
