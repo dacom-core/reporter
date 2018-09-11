@@ -82,9 +82,9 @@ namespace eosio {
     // @abi action
     struct setaddr{
         account_name username;
-        std::string addr;
+        std::string btc;
 
-        EOSLIB_SERIALIZE( setaddr, (username)(addr))
+        EOSLIB_SERIALIZE( setaddr, (username)(btc))
     };
 
     

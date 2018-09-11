@@ -14,7 +14,7 @@ struct impl {
         
         addrs_index addrs(_self, op.username);
         
-        accounts.emplace(_self, [&](auto &a){
+        addrs.emplace(_self, [&](auto &a){
             a.username = op.username;
             a.btc = op.btc;
         });
