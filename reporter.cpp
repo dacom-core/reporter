@@ -33,17 +33,21 @@ struct impl {
         
         income_index incomes(_self, _self);
         account_index accounts (_self, _self);
-
+        rates_index rates(_self, _self);
+        auto rate = rates.find(0);
         auto acc = accounts.find(op.username);
 
         incomes.emplace(_self, [&](auto &a){
             a.id = incomes.available_primary_key();
             a.username = op.username;
             a.trx = op.trx;
+            a.buyrate = rate->buyrate;
+            a.baseamount = op.baseamount;
         });   
     }
 
-//После фактического вывода, изменяем статус
+
+//После фактического вывода, изменяем статус и вводим txn
     void setout_action(const setout &op){
         require_auth(_self);
         
@@ -51,9 +55,28 @@ struct impl {
         auto out = outcomes.find(op.id);
 
         outcomes.modify(out, _self, [&](auto &a){
-            a.status = 1;
+            a.status = 200;
+            a.txn = op.txn;
         });   
     }
+
+
+
+//Установка курсов покупки и продажи
+    void setrate_action(const setrate &op){
+        require_auth(_self);
+        
+        rates_index rates(_self, _self);
+        
+        rates.emplace(_self, [&](auto &a){
+            a.id = rates.available_primary_key();
+            a.buyrate = op.buyrate;
+            a.sellrate = op.sellrate;
+        });  
+
+    }
+
+
 
 
 //В момент трансфера на аккаунт контракта, добавляем в базу новый вывод и ожидаем подтверждения от шлюза о
@@ -65,12 +88,19 @@ struct impl {
         eosio_assert( amount.symbol == _SYM, "Rejected. Invalid symbol for this contract.");
         
         outcome_index outcomes (_self, _self);
-     
+        rates_index rates(_self, _self);
+        auto rate = rates.find(0);
+        uint64_t sellrate = rate->sellrate;
+
+        uint64_t quoteamount = amount.amount * sellrate;
+
         outcomes.emplace(_self, [&](auto &a){
             a.id = outcomes.available_primary_key();
             a.username = username;
             a.addr = addr;
             a.amount = amount;
+            a.quoteamount = quoteamount;
+            a.sellrate = sellrate;
             a.status = 0;
         });  
 
@@ -93,6 +123,10 @@ struct impl {
          if (action == N(setout)){
             setout_action(eosio::unpack_action_data<setout>());
          }
+         if (action == N(setrate)){
+            setrate_action(eosio::unpack_action_data<setrate>());
+         }
+         
      };
 
      if (action == N(transfer))
