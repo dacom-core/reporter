@@ -15,16 +15,15 @@ namespace eosio {
     struct income {
         uint64_t id;
         account_name username;
-        std::string amount;
-        std::string trx;
-        std::string baseasset;
+        eosio::asset quoteamount;
+        std::string txn;
         uint64_t baseamount;
         uint64_t buyrate;
         uint64_t status=0;
 
         uint64_t primary_key()const { return id; }
 
-        EOSLIB_SERIALIZE( income, (id)(username)(amount)(trx)(baseamount)(status))
+        EOSLIB_SERIALIZE( income, (id)(username)(quoteamount)(txn)(baseamount)(status))
 
     };
     typedef eosio::multi_index<N(income), income> income_index;
@@ -35,7 +34,7 @@ namespace eosio {
         account_name username;
         std::string addr;
         std::string txn;
-        eosio::asset amount;
+        eosio::asset baseamount;
         uint64_t sellrate;
         uint64_t quoteamount;
         uint64_t status;
@@ -43,7 +42,7 @@ namespace eosio {
         uint64_t primary_key()const { return id; }
 
 
-        EOSLIB_SERIALIZE( outcome, (id)(username)(addr)(txn)(amount)(sellrate)(quoteamount)(status))
+        EOSLIB_SERIALIZE( outcome, (id)(username)(addr)(txn)(baseamount)(sellrate)(quoteamount)(status))
     };
     typedef eosio::multi_index<N(outcome), outcome> outcome_index;
 
@@ -91,11 +90,10 @@ namespace eosio {
     // @abi action 
     struct setinc{
         account_name username;
-        std::string trx;
+        std::string txn;
         uint64_t baseamount;
-        std::string baseasset;
-
-        EOSLIB_SERIALIZE( setinc, (username)(trx)(baseamount))
+        eosio::asset quoteamount;
+        EOSLIB_SERIALIZE( setinc, (username)(txn)(baseamount)(quoteamount))
 
     };
 

@@ -31,7 +31,7 @@ struct impl {
         incomes.emplace(_self, [&](auto &a){
             a.id = incomes.available_primary_key();
             a.username = op.username;
-            a.trx = op.trx;
+            a.txn = op.txn;
             a.buyrate = rate->buyrate;
             a.baseamount = op.baseamount;
         });   
@@ -90,7 +90,7 @@ struct impl {
             a.id = outcomes.available_primary_key();
             a.username = username;
             a.addr = addr;
-            a.amount = amount;
+            a.baseamount = amount;
             a.quoteamount = quoteamount;
             a.sellrate = sellrate;
             a.status = 0;
