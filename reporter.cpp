@@ -84,7 +84,7 @@ struct impl {
 
         uint64_t sellrate = rate->sellrate;
 
-        uint64_t quoteamount = amount.amount * sellrate / 10000 ;
+        uint64_t quoteamount = amount.amount * sellrate;
 
         outcomes.emplace(_self, [&](auto &a){
             a.id = outcomes.available_primary_key();

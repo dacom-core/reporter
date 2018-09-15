@@ -23,7 +23,7 @@ namespace eosio {
 
         uint64_t primary_key()const { return id; }
 
-        EOSLIB_SERIALIZE( income, (id)(username)(quoteamount)(txn)(baseamount)(status))
+        EOSLIB_SERIALIZE( income, (id)(username)(quoteamount)(txn)(baseamount)(buyrate)(status))
 
     };
     typedef eosio::multi_index<N(income), income> income_index;
