@@ -28,12 +28,15 @@ struct impl {
         rates_index rates(_self, _self);
         auto rate = rates.find(0);
         
+        uint64_t quoteamount = op.baseamount * rate->buyrate;
+
         incomes.emplace(_self, [&](auto &a){
             a.id = incomes.available_primary_key();
             a.username = op.username;
             a.txn = op.txn;
             a.buyrate = rate->buyrate;
             a.baseamount = op.baseamount;
+            a.quoteamount = asset(quoteamount, _SYM);
         });   
     }
 

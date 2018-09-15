@@ -9,7 +9,7 @@
 
 namespace eosio {
     static const account_name _self = N(reporter);
-    static const eosio::symbol_name _SYM = S(4, FLO);
+    static const eosio::symbol_name _SYM = S(4, DBTC);
 
     // @abi table income i64
     struct income {
